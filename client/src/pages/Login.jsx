@@ -19,6 +19,12 @@ function Login() {
         theme: "dark",
     };
 
+    useEffect(() => {
+        if (localStorage.getItem("chat-app-user")) {
+            navigate("/");
+        }
+    }, []);
+
     const [values, setValues] = useState({
         email: "",
         password: "",
