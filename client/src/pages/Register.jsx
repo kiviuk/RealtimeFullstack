@@ -25,7 +25,6 @@ function Register() {
         }
     }, []);
 
-
     const [values, setValues] = useState({
         username: "",
         email: "",
