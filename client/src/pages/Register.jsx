@@ -9,6 +9,8 @@ import {registerRoute} from "../utils/APIRoutes";
 
 function Register() {
 
+    const navigate = useNavigate()
+
     const toastOptions = {
         position: "bottom-right",
         autoClose: 3000,
@@ -25,7 +27,7 @@ function Register() {
     });
 
     const validate = (value, rule, message, errors) => {
-        if(!rule(value)){
+        if (!rule(value)) {
             toast.error(message, toastOptions);
             errors.push(message);
         }
@@ -47,16 +49,21 @@ function Register() {
         event.preventDefault();
 
         if (handleValidation()) {
-            const { email, username, password } = values;
+            const {email, username, password} = values;
 
             try {
-                const response = await axios.post(registerRoute, {
+                const {data} = await axios.post(registerRoute, {
                     username,
                     email,
                     password,
                 });
 
-                console.log("POST confirmed -> Response data: ", response.data);
+                if (data.status === false) {
+                    toast.error(data.msg, toastOptions);
+                } else {
+                    localStorage.setItem("chat-app-user", JSON.stringify(data.user));
+                }
+                navigate("/")
 
             } catch (error) {
                 console.error("An error occurred while trying to send POST request: ", error);
@@ -64,6 +71,7 @@ function Register() {
         } else {
             console.error("Validation failed");
         }
+
     };
 
     const handleChange = (event) => {
@@ -74,7 +82,7 @@ function Register() {
         <>
             <FormContainer>
                 <form autoComplete="on"
-                    onSubmit={event => handleSubmit(event)}>
+                      onSubmit={event => handleSubmit(event)}>
                     <div className="brand">
                         <img src={Logo} alt="Logo"/>
                         <h1>snappy</h1>

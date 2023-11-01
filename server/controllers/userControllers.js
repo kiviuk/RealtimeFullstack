@@ -1,15 +1,35 @@
-module.exports.register = (req, res, next) => {
+const User = require("../model/userModel");
+const bcrypt = require("bcrypt");
+
+module.exports.register = async (req, res, next) => {
     try {
-        const { username, email, password } = req.body;
+        const {username, email, password} = req.body;
 
-        console.log(req.body);
+        const usernameCheck =
+            await User.findOne({username})
 
-        const dummyUser = {
-            username: 'John',
-            email: 'J@Ohn'
-        };
+        if (usernameCheck) {
+            return res.json({msg: "Username already in use.", status: false})
+        }
 
-        return res.json({ status: true, dummyUser})
+        const emailCheck =
+            await User.findOne({email})
+
+        if (emailCheck) {
+            return res.json({msg: "E-Mail address already in use.", status: false})
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user =
+            await User.create({
+                email,
+                username,
+                password: hashedPassword,
+            });
+
+        delete user.password;
+
+        return res.json({user, status: true})
 
     } catch (ex) {
         next(ex);
