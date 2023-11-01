@@ -20,7 +20,7 @@ function Register() {
     };
 
     useEffect(() => {
-        if (localStorage.getItem("chat-app-user")) {
+        if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
             navigate("/");
         }
     }, []);
@@ -67,7 +67,7 @@ function Register() {
                 if (data.status === false) {
                     toast.error(data.msg, toastOptions);
                 } else {
-                    localStorage.setItem("chat-app-user", JSON.stringify(data.user));
+                    localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, JSON.stringify(data.user));
                 }
                 navigate("/")
 
