@@ -1,0 +1,23 @@
+%% https://mermaid.live/edit#pako:eNp1UttqAjEQ_ZUhUGjB_QEpltUKLdgitX1oXR_GzegGdxOZREUW_73JRutW2zzN7ZzJnJla5EaS6Iol47qA936mM31zA2-0VNYxOmU0jNnkZG2mwb_0dhqTxLM7SJIejOq0ZEK5v59zrzTLJclE6YfDkerDEoOygLEIYgUo3QHcokOGvKB8FdlHnhE-yTbEgxBPm5r6CS1E84c4PaGNsQR2M1-UZhdpvBMHGsRkLI258FrMoeGrafpNqKTcxfD0F3J2hraLAjYdPydDZsNXFBFDWob__gU9zTnxvhsU6KaNBcGcXainjTsr19Lq-PV-3d5YWMSwQlUCahmcMVq7M9zYWyyVDCIGjv4_ereyxw7paYoL7a6GEB1REfvu0p9VHTCZcAVVlImuNyXyKhOZPvg63Dgz2etcdB1vqCM2a4mOHhX65VWiu8DS-uga9ZcxZ5-kcoZf4t0253v4Bkby5uc
+graph TB
+
+%% Registration Process
+    A([Register]) --> L{Already<br>logged-in?}
+
+%% User is already logged in, avatar check
+    L -- Yes --> CheckAvatar{Has Avatar?}
+
+%% Avatar choose subflow
+    subgraph Choose Avatar
+        CheckAvatar -- No --> SelectAvatar[Choose Avatar]
+        SelectAvatar -- API-Error --> SelectAvatar
+    end
+
+    SelectAvatar -- Yes --> StartChat[Start Chat]
+
+%% User is not logged in
+    L -- No --> B{Registration<br>Email and<br>Password<br>valid?}
+    B -- Yes --> CheckAvatar
+    B -- No --> A
+
+    CheckAvatar -- Yes --> StartChat

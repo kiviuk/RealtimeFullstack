@@ -1,0 +1,28 @@
+%% https://mermaid.live/edit#pako:eNqVVHmvokgQ_yosk0l2k3Gf95XNbDg8UMQDFPX5YlpoBIEGuxtBzfvui-A-fbM7myx_VVfV7-iiU1fWCEzIttmvXxmb0pC0X158iH3gmL97zgm-QNOhX0LgBm2oHBfzckmOL9x060SVuCPy21XHcVv-oButDI1b0Na5iy9YJ9r8qIpHjZxqxK-ssdK9CJaMrMpJOc8UYboQOx6nhAO9p12sweFir0a1WBDHyVlzSdixZ8M1LB1XtNpCU-uygMsRf1QkI44ru2rg8T250JVkVbNWtA-lkJp4PN2Jo9kolAGHK1HcOsx9ys9m-pEfDGuQCHy9Ue3UmzNbNOcLbHb1Q5TUdqK9GutxUsInQx4efIL9vRrGVb1ZjhS-P6w0G_6UytviUUbSXO0th2axKJUUv9unSW1sC8kyrGnlXtfYrrdyv7XaxXVhWACX_laCiaGXTwXeiUvhsDxS62G9Mat1fc63O1zDKfKViWtY2PeK9Ynbi6zewSr1JOSU7eKgrk8r573BH9yGLpa0CUgQgNX6ZeiMd9MZjcZBMqgMoNJwnYFxVGskae7BjmrBYUxGaocX1u6iV9Xck9Cqg4nvqPEWzgNB1qOmhJbd42gdaqSsqvag6U90sOssa1EitvoLL-qT86FQnpSPhfKWG8Oq1O9s0B6D0GY0foM2iEm_9KnIwd5BzAQHBiQkz2apX1_lcU9S3n5jCoXvjGBDw50TiCVTQioNMNjD6-3MSOIfO_ydSTnkwAAecy_--f6kwUU0YLxMyIKAODsPMo7FACa6MdiAMMDDEJjnW9MemgXnjv032dQPs4Iks3Ujzty-ZhJZ-Mtbjv2oPS7AnQAF-NpPBfPwZy5RQD-c_rcTJcjoF8BzTAFDEyLqAI9cs0Q2mczDJ6GM665kPDB5_Uem5-s-XeKJTkKnG-b_EN5dZ9Z-NOag_U9-DoGUAYgBdwM3EIl2-ZsS7CAgkOGeah9jy5NPunlznn79hHx7hj6ablhuIhU6GAf4HxQ5BiJz8_xsHsi_x6emZyrYgL5mEXML3x6YT3JP3ew39r5H0-V6vXVvWGpDH27YdhqaALsbdoPe0z6QPiH1jAy2TXEEv7FRaAIKRQekQ_LZtpWOP82GAK2D4HG-LeYAj_LtnS3x978AzZvs9w
+graph TB
+
+    %% Login Process
+    Login([LOGIN]) --> CheckUserIdInStorage{User ID<br> in Local Storage?}
+
+    %% Auto login if a user has already logged-in
+    CheckUserIdInStorage -- Yes --> AutoLogin[Auto Login!]
+    AutoLogin --> CheckAvatar{Has Avatar?}
+
+    %% Auto login not feasible
+    CheckUserIdInStorage -- No --> ValidCredentials{Valid<br> Login?}
+
+    %% Check login credentials
+    ValidCredentials -- Yes --> CheckAvatar
+
+    %% Invalid login credentials
+    ValidCredentials -- No --> Login
+
+    %% Checking if a user has already set an avatar
+    subgraph Choose Avatar
+        CheckAvatar -- No --> ChooseAvatar[Choose Avatar]
+        ChooseAvatar -- API-Error --> ChooseAvatar
+    end
+
+    CheckAvatar -- Yes --> StartChat[Start Chat]
+
+    ChooseAvatar --> StartChat

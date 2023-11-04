@@ -1,0 +1,31 @@
+%% https://mermaid.live/edit#pako:eNptUtFqwzAM_BVhKGzQ_EAYHWlX2KAbZd0etqYPWqwlpoldZLejhP77nLijLkueTtLpfBfUisJIEqkoGXcVvE1znWvw32gEr1Qq6xidMhqWbAqyNgyzm3UYEm9uIUkmsGizmgnl8e6LJ7UpS5KJ0venSO7dEoOygIEIgQVKjwEP6JChqKjYBv7Cq8IH2V581vWzntM-ooUAr8SzSAFQS4_QhWm0HYuufO1mnrXuEXRwM7jxYsIC1VS40F6H4vzsZiClNu6SMMp0Fpu28wZV3Vnt_tgSrf0x3OMD1kp24bqd6ZXlyEE0Pktmfy5i2mDiYVq2fErmzIb_vSXGoiH2fqU_lLbbzoWrqKFcpB5K5G0ucn3yPNw7szrqQqSO9zQW-51ERw8K_X01Iv3G2vruDvWnMZeapHKGn8Ml9gd5-gXli9Sc
+graph TB
+
+    %% Registration Process
+    A([Chat]) --> L{Already<br>logged-in?}
+
+    %% User is already logged in, avatar check
+    L -- Yes --> CheckAvatar{Has Avatar?}
+
+    %% Avatar check and chat
+    subgraph Choose Avatar
+        CheckAvatar -- No --> SelectAvatar[Choose Avatar]
+        SelectAvatar -- API-Error --> SelectAvatar
+    end
+
+    CheckAvatar -- Yes --> FetchContacts[Fetch Contacts]
+
+    %% User is not logged in
+    L -- No --> B{Login}
+
+    SelectAvatar -- Yes --> FetchContacts
+
+    FetchContacts --> StartChat[Start Chat]
+
+
+
+
+
+
+
+
