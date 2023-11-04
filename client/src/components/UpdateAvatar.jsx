@@ -12,7 +12,7 @@ export default function UpdateAvatar() {
     const navigate = useNavigate();
     const [avatars, setAvatars] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedAvatar, setSelectedAvatar] = useState(undefined);
+    const [selectedAvatarIndex, setSelectedAvatarIndex] = useState(undefined);
     const toastOptions = {
         position: "bottom-right",
         autoClose: 8000,
@@ -31,24 +31,29 @@ export default function UpdateAvatar() {
 
     const setProfilePicture = () => {
         const fetchData = async () => {
-            if (selectedAvatar === undefined) {
+            if (selectedAvatarIndex === undefined) {
                 toast.error("Please select an avatar.", toastOptions);
             } else {
                 const user = await JSON.parse(
                     localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
                 );
 
+                console.log("Setting Avatar for user " + user._id)
+                console.log("Setting Avatar for user " + JSON.stringify(avatars[selectedAvatarIndex]).slice(-10));
+
                 const { data } = await axios.post(`${updateAvatarRoute}/${user._id}`, {
-                    image: avatars[selectedAvatar],
+                    image: avatars[selectedAvatarIndex],
                 });
 
                 if (data.isSet) {
                     user.hasAvatarImage = true;
                     user.avatarImage = data.image;
+                    localStorage.removeItem(process.env.REACT_APP_LOCALHOST_KEY)
                     localStorage.setItem(
                         process.env.REACT_APP_LOCALHOST_KEY,
                         JSON.stringify(user)
                     );
+
                     navigate("/");
                 } else {
                     toast.error("Error setting avatar. Please try again.", toastOptions);
@@ -69,8 +74,8 @@ export default function UpdateAvatar() {
                     const buffer = new Buffer(image.data);
                     data.push(buffer.toString("base64"));
                 } catch (error) {
-                    console.error(error);
-                    toast.error("Error fetching avatars. Please try later.", toastOptions);
+                    // console.error(error);
+                    // toast.error("Error fetching avatars. Please try later.", toastOptions);
                 }
         }
         setAvatars(data);
@@ -96,14 +101,14 @@ export default function UpdateAvatar() {
                                 <div
                                     key={index}
                                     className={`avatar ${
-                                        selectedAvatar === index ? "selected" : ""
+                                        selectedAvatarIndex === index ? "selected" : ""
                                     }`}
                                 >
                                     <img
                                         src={`data:image/svg+xml;base64,${avatar}`}
                                         alt="avatar"
                                         key={avatar}
-                                        onClick={() => setSelectedAvatar(index)}
+                                        onClick={() => setSelectedAvatarIndex(index)}
                                     />
                                 </div>
                             );
